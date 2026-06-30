@@ -12,7 +12,7 @@ select * from (values (
     'Cyberstalking, doxxing, online harassment, and non-consensual sharing of images can be reported regardless of the victim''s gender. Relevant provisions include IT Act 2000 Sections 66E and 67/67A, and Bharatiya Nyaya Sanhita (BNS) provisions on stalking, criminal intimidation, and defamation. You can file a complaint at the National Cyber Crime Reporting Portal (cybercrime.gov.in) or your nearest cybercrime cell. This is general information, not legal advice for your specific situation — UNREVIEWED DRAFT, pending lawyer review (PRD §7.1).',
     'IT Act 2000 §§66E, 67, 67A; Bharatiya Nyaya Sanhita 2023 (stalking, criminal intimidation, defamation provisions)',
     'cyber-abuse',
-    null
+    null::vector
 )) as v(title, content, source_citation, content_category, embedding)
 where not exists (select 1 from knowledge_chunks where title = 'What counts as cyber harassment under Indian law');
 
@@ -22,7 +22,7 @@ select * from (values (
     'The Maintenance and Welfare of Parents and Senior Citizens Act, 2007 is gender-neutral and lets a senior citizen (including fathers) apply to a Maintenance Tribunal for maintenance from children or relatives, and provides a process for addressing neglect. Unlike several other categories in this taxonomy, the law here is already comparatively clear and accessible. This is general information, not legal advice for your specific situation — UNREVIEWED DRAFT, pending lawyer review (PRD §7.1).',
     'Maintenance and Welfare of Parents and Senior Citizens Act, 2007',
     'elder-abuse',
-    null
+    null::vector
 )) as v(title, content, source_citation, content_category, embedding)
 where not exists (select 1 from knowledge_chunks where title = 'The Senior Citizens Act, 2007 — a remedy that already works');
 

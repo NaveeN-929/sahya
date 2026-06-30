@@ -65,3 +65,9 @@ and behavior notes: `design-system/docs/COMPONENT-SPECS.md`. Rationale and tone:
 5. Check contrast against WCAG AA (4.5:1 body, 3:1 large text/UI) — don't substitute
    adjacent token shades without re-checking.
 6. Test with `prefers-reduced-motion` on and with `data-contrast="high"` / large-text mode.
+7. **If the component reads `localStorage`/`sessionStorage`/anything browser-only:** never
+   do it in a `useState` lazy initializer or directly during render — the server always
+   renders the "nothing stored yet" state, so the client's first render must match that,
+   or React throws a hydration-mismatch error (hit live in `app-shell.tsx` and
+   `privacy/page.tsx`, 2026-06-30). Start the state `null`/empty on both sides and set the
+   real value in a `useEffect` after mount instead.

@@ -29,8 +29,15 @@ export default function PrivacyPage() {
   const router = useRouter();
   const [consents, setConsents] = useState<ConsentRecord[]>([]);
   const [confirmingDelete, setConfirmingDelete] = useState(false);
+  // Starts null on both server and the client's first paint — getStoredHandle() reads
+  // localStorage, which the server can never see, so reading it directly during render
+  // (or in a lazy useState initializer) causes a hydration mismatch. Set for real only
+  // after mount, same fix as app-shell.tsx.
+  const [handle, setHandle] = useState<string | null>(null);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setHandle(getStoredHandle());
     listConsents()
       .then(setConsents)
       .catch((err) => console.error("could not load consents", err));
@@ -92,7 +99,7 @@ export default function PrivacyPage() {
       <div>
         <h1 className="font-heading text-xl font-semibold text-ink">Privacy &amp; account</h1>
         <p className="mt-1 text-sm text-ink-secondary">
-          Session: <span className="font-mono">{getStoredHandle() ?? "—"}</span>
+          Session: <span className="font-mono">{handle ?? "—"}</span>
         </p>
       </div>
 

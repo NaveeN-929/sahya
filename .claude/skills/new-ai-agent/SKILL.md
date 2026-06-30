@@ -20,7 +20,12 @@ calls a provider directly. Every agent goes through the same request lifecycle:
 5. Post-generation safety check, then return `{ response, safety_interrupt (nullable),
    citations (for legal-info agent) }`. `safety_interrupt` is always a separate field from
    `response` so the client renders crisis UI from a fixed component regardless of what the
-   model produced (PRD §11.3).
+   model produced (PRD §11.3). **Don't skip the post-generation check** — live-tested
+   2026-06-30 against a small local model, which fabricated a phone number/hotline despite
+   an explicit system-prompt instruction not to. `agent.rs`'s
+   `contains_invented_resource_details` (any 6+-digit run in the reply, since the prompt
+   context never contains a real number) catches this and swaps in a safe fallback; reuse
+   or extend that pattern for any new agent rather than trusting instruction-following alone.
 6. Persist to `ai_conversations`/`ai_messages` with `content_encrypted` (per-user envelope
    encryption) and a structured `safety_flags` object — flag categories only, never raw
    classifier reasoning or full transcript in the flag (PRD §10.1, NFR-5).

@@ -19,9 +19,17 @@ const TELE_MANAS_TEL = "tel:14416";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const [handle, setHandle] = useState<string | null>(() => getStoredHandle());
+  // Starts null on both server and the client's first paint on purpose — the server can
+  // never know the client's localStorage value, so seeding this from getStoredHandle() in
+  // a lazy initializer (the "obvious" fix) causes a hydration mismatch the moment a token
+  // already exists. Set it for real only after mount, in the effect below.
+  const [handle, setHandle] = useState<string | null>(null);
 
   useEffect(() => {
+    // Post-hydration sync from localStorage; setting this any earlier reintroduces the
+    // hydration mismatch explained above.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setHandle(getStoredHandle());
     ensureSession()
       .then((session) => setHandle(session.pseudonymous_handle))
       .catch((err) => {

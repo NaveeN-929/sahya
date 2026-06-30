@@ -131,6 +131,30 @@ Legal Information Agent (legal-info/journal-assistant/resource-rec `agent_type`s
 the data model but return a "not available yet" message rather than generating content —
 see `LIVE_AGENT_TYPES` in `agent.rs`), phone/email auth upgrade, professional booking.
 
+**Live-tested end-to-end on 2026-06-30** (Postgres + Ollama via `docker compose`, `llama3.2:1b`
+model, full Playwright browser walkthrough of every page) — two real bugs were found and
+fixed during that pass, worth knowing about before touching this code again:
+- **Hydration mismatch in any component reading `localStorage` during render or in a
+  `useState` lazy initializer** (`app-shell.tsx`, `privacy/page.tsx`) — the server can never
+  see `localStorage`, so it always renders the "empty" state; if the client's *first* render
+  reads the real value (as a lazy initializer or inline render-time call does), React's
+  hydration check fails. Fix: state starts `null` on both sides, gets set for real in a
+  `useEffect` after mount (with an `eslint-disable-next-line react-hooks/set-state-in-effect`
+  — that lint rule's "no synchronous setState in an effect" heuristic is wrong for this
+  specific case). Apply the same pattern to any new component reading browser-only storage.
+- **The local 1B Ollama model does not reliably follow "never invent a phone
+  number/hotline/org name" as a system-prompt instruction** — confirmed live, it fabricated
+  a US hotline number, then on retries a fake Indian helpline number and fake URLs, despite
+  the system prompt explicitly forbidding it (rules 6/7 in `SYSTEM_PROMPT`, `agent.rs`).
+  Fixed with a **post-generation filter** (`contains_invented_resource_details` in
+  `agent.rs`): any 6+-digit run in the model's reply text is treated as an invented number
+  (the prompt context never contains a real one) and the whole reply is discarded for a
+  safe generic fallback. Verified this fires reliably across repeated trials. This is the
+  PRD's own prescribed mitigation (§9.4.2/§9.7: don't rely on instruction-following alone
+  for safety-critical generation) — keep this pattern for any future agent that could be
+  tempted to name a specific resource, and re-verify it against whatever model/provider
+  actually ends up in production, not just this 1B dev model.
+
 **Known placeholders that must not be mistaken for production-ready (PRD §7.1 still
 unconfirmed):**
 - `crisis.rs::detect_signal` is a non-clinically-validated keyword/mood heuristic, explicitly

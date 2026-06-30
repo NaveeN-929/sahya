@@ -59,7 +59,8 @@ Rules you must always follow: \
 (3) You are not a therapist or doctor: never diagnose a condition or claim certainty about what someone has. \
 (4) You are not a lawyer: never assess the merits of a legal situation, predict an outcome, or suggest specific wording for a complaint or filing — if asked, gently redirect to speaking with a licensed professional. \
 (5) Keep responses concise, warm, plain-language, and never therapy-jargon. \
-(6) If someone describes thoughts of harming themselves or others, respond with care and let the platform's separate crisis-resource system handle resource surfacing — don't try to resolve a crisis yourself in the text alone.";
+(6) If someone describes thoughts of harming themselves or others, respond with care, stay present with them in the text, and explicitly say that help is available — but do not name, invent, or guess any specific helpline, hotline, phone number, or organization yourself. The platform shows a separate, verified resource list automatically; you naming your own (even ones you believe are real) risks surfacing a wrong number to someone in crisis, which is dangerous. Say something like \"I've put some real, verified ways to get immediate support below\" and stop there. \
+(7) Never state a phone number, helpline name, or organization name of any kind in your reply, for any topic (crisis, legal, medical, financial) — always redirect to \"the resources below\" or \"a licensed professional you can find through this platform's directory\" instead of naming one yourself.";
 
 #[derive(Deserialize)]
 struct ConverseRequest {
@@ -165,6 +166,23 @@ async fn converse(
 
     let assistant_text = if LIVE_AGENT_TYPES.contains(&agent_type.as_str()) {
         match generate_reply(&state, pool, &user, conversation_id).await {
+            Ok(text) if contains_invented_resource_details(&text) => {
+                // Post-generation safety check (PRD §9.4.2/§9.7): the model was told never
+                // to name a hotline/number/org itself (CLAUDE.md non-negotiable #2/#4), but
+                // small/local models don't reliably follow that instruction — confirmed
+                // live, a 1B Ollama model fabricated a phone number and a fake URL despite
+                // the system prompt forbidding it. Never forward a reply containing
+                // phone-number-shaped content; fall back to a safe, generic message and let
+                // safety_interrupt (built from the real resource list below, never from the
+                // model) carry any actual resource info.
+                tracing::warn!(
+                    "discarded an AI Companion reply containing invented resource details"
+                );
+                "I want to be careful not to point you to a phone number or resource I'm not \
+                 fully certain is correct. Use the \"Get help now\" button above for crisis \
+                 support, or the lawyer/therapist directory in the menu, for anything specific."
+                    .to_string()
+            }
             Ok(text) => text,
             Err(err) => {
                 tracing::warn!(%err, "LLM provider call failed, returning fallback reply");
@@ -230,6 +248,32 @@ async fn converse(
         citations: vec![],
     })
     .into_response()
+}
+
+/// Post-generation safety check (PRD §9.4.2, §9.7). The agent's prompt context never
+/// contains a real phone number (the resource list lives entirely in `crisis.rs` /
+/// `safety_interrupt`, never in the LLM context), so any run of 6+ digits in the model's
+/// own reply text can only be something it invented — flag it so the caller can discard
+/// the reply rather than forward a possibly-fabricated number to someone who may be in
+/// crisis. Deliberately simple/conservative (no external regex dependency): it will also
+/// catch a few harmless cases (e.g. a long un-separated reference number), which is an
+/// acceptable false-positive rate for a safety filter that just falls back to a generic,
+/// still-helpful message rather than blocking the conversation.
+fn contains_invented_resource_details(text: &str) -> bool {
+    let mut digit_run = 0usize;
+    for c in text.chars() {
+        if c.is_ascii_digit() {
+            digit_run += 1;
+            if digit_run >= 6 {
+                return true;
+            }
+        } else if matches!(c, '-' | ' ' | '.' | '(' | ')') {
+            // separators within a number don't break the run
+        } else {
+            digit_run = 0;
+        }
+    }
+    false
 }
 
 async fn recent_mood_scores(pool: &sqlx::PgPool, user_id: Uuid) -> anyhow::Result<Vec<i16>> {
