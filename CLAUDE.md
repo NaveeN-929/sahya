@@ -62,6 +62,7 @@ not style preferences. Violating them is a shippability blocker, not a nitpick.
 | Database | PostgreSQL (+ `pgvector` for MVP-scale vector search) | PRD §8.3 — relational integrity for consent/DSR auditability beats document-store flexibility here; Qdrant is a Phase 2+ swap-in, not an MVP dependency |
 | Object storage | S3-compatible (Cloudflare R2 recommended) | zero egress fees for evidence file retrieval, PRD §8.6 |
 | AI orchestration | Dedicated service layer; client never calls the LLM provider or holds a provider key | PRD §8.4 — all `/agent/*` calls proxy through the Application plane |
+| LLM provider (current) | Self-hosted via Ollama (Docker), `backend/src/llm/` | PRD §9.7 — narrow/self-hosted is fine at this team's scale; swap by implementing `LlmProvider` for a hosted provider later, agent code doesn't change |
 | Infra | Docker for local/CI; Kubernetes deferred until real scale need; Cloudflare CDN/DDoS | PRD §8.6 — avoid premature orchestration overhead for a small team |
 
 Provider-abstracted LLM calls (PRD §9.7) — do not hard-couple agent code to one provider's SDK
@@ -114,6 +115,33 @@ support + abuse assessment), crisis resource auto-surfacing, a narrow Knowledge 
 auth, and a small hand-vetted Resource Directory ship first. Full Legal Information Agent
 RAG and evidence storage are Phase 1.5. Community features are explicitly deferred to
 Phase 3 and gated on real-time human moderation.
+
+**Implemented (as of 2026-06-30):** anonymous session auth + envelope encryption
+(`backend/src/auth/`, `backend/src/crypto.rs`); AI Companion conversation persistence +
+Ollama-backed replies + placeholder crisis-signal detection (`backend/src/routes/agent.rs`,
+`backend/src/crisis.rs`); Journal CRUD + mood check-ins (`backend/src/routes/journal.rs`);
+Knowledge Platform browse/search over `knowledge_chunks` (`backend/src/routes/knowledge.rs`,
+two seed articles); Resource Directory search over `professionals`
+(`backend/src/routes/directory.rs`, two clearly-marked `[SEED]` placeholder entries);
+consent management, data export, account deletion (`backend/src/routes/account.rs`,
+`auth.rs`); frontend pages for all of the above (`frontend/src/app/{chat,journal,directory,
+knowledge,privacy}`). **Not implemented:** incident timelines, evidence upload, Journal
+Assistant summarization/PDF export (Phase 1.5 per PRD §16.1), the standalone RAG-grounded
+Legal Information Agent (legal-info/journal-assistant/resource-rec `agent_type`s exist in
+the data model but return a "not available yet" message rather than generating content —
+see `LIVE_AGENT_TYPES` in `agent.rs`), phone/email auth upgrade, professional booking.
+
+**Known placeholders that must not be mistaken for production-ready (PRD §7.1 still
+unconfirmed):**
+- `crisis.rs::detect_signal` is a non-clinically-validated keyword/mood heuristic, explicitly
+  commented as such. Do not point real users at it without the Tier 1 clinical review.
+- The two `knowledge_chunks` seed rows have `reviewed_by`/`reviewed_at` left `NULL` —
+  correctly rendered as "Unreviewed draft" by the frontend — because no lawyer review has
+  happened. Don't backfill those columns without a real reviewer.
+- The two `professionals` seed rows are named `[SEED] ...` and `credentials_verified =
+  false` on purpose — they are not real vetted listings.
+- `SAHAY_MASTER_KEY` env-var-based key wrapping (`crypto.rs`) is adequate for dev/MVP, not a
+  substitute for a real KMS in production.
 
 **Tier 1 research gates (PRD §7.1) — clinical safety review, legal content review, data
 protection counsel review — must clear before any crisis flow, legal content, or user data

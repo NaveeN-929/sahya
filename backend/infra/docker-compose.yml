@@ -16,5 +16,18 @@ services:
       timeout: 5s
       retries: 10
 
+  # Local LLM runtime for the AI Companion (PRD §9.7 — self-hosted models are fine for a
+  # narrow scope at this team's current scale; this is the dev/MVP provider, swappable for
+  # a hosted provider later via OLLAMA_BASE_URL / a different LlmProvider impl).
+  # After `docker compose up -d`, pull a model once: `docker compose exec ollama ollama pull llama3.2`
+  ollama:
+    image: ollama/ollama:latest
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - sahay-ollama-data:/root/.ollama
+
 volumes:
   sahay-postgres-data:
+  sahay-ollama-data:

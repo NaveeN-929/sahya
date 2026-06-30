@@ -25,34 +25,40 @@ on (and eventually deployed) on its own.
 
 ## Local development
 
-**Database:**
+**Database + local LLM:**
 
 ```sh
 docker compose -f backend/infra/docker-compose.yml up -d
+docker compose -f backend/infra/docker-compose.yml exec ollama ollama pull llama3.2   # once
 ```
 
 **Backend (`backend/`):**
 
 ```sh
 cd backend
-cp .env.example .env   # adjust DATABASE_URL if needed
-cargo sqlx migrate run --source migrations   # or: sqlx migrate run (requires sqlx-cli)
+cp .env.example .env   # set SAHAY_MASTER_KEY (openssl rand -base64 32); adjust DATABASE_URL/OLLAMA_* if needed
 cargo run
 ```
 
-The API binds to `0.0.0.0:8080` by default. `/healthz` reports process + DB status.
-`/api/v1/directory/crisis-resources` works even without a database connection — that's a
-deliberate architectural property, not an oversight (see PRD §11.6).
+Migrations run automatically on startup (`sqlx::migrate!`, see `config.rs`) — no separate
+migration step needed. The API binds to `0.0.0.0:8080` by default. `/healthz` reports
+process + DB status. `/api/v1/directory/crisis-resources` works even without a database
+connection — that's a deliberate architectural property, not an oversight (see PRD §11.6).
+If `SAHAY_MASTER_KEY` is unset, an ephemeral key is generated per process (fine for a quick
+test, but encrypted content won't survive a restart).
 
 **Frontend (`frontend/`):**
 
 ```sh
 cd frontend
+cp .env.local.example .env.local   # points at the backend above
 npm install
 npm run dev
 ```
 
-Runs on `http://localhost:3000`.
+Runs on `http://localhost:3000`. Pages: `/` (landing/first disclosure), `/chat` (AI
+Companion), `/journal`, `/directory` (resource directory), `/knowledge` (educational
+content), `/privacy` (consents, data export, account deletion).
 
 ## Before building a feature
 
@@ -63,7 +69,11 @@ are architectural, not style preferences. Use the relevant skill in `.claude/ski
 recurring work (new AI agent, new API endpoint, new design component, legal content entry,
 DB migration, safety/DPDPA pre-ship check, go-live readiness) rather than freehanding it.
 
-**Status as of 2026-06-30:** PRD draft v1.0 complete; Tier 1 research gates (clinical
-safety review, legal content review, data protection counsel review — PRD §7.1) have not
-yet been confirmed. No crisis flow, legal content, or user data collection should ship
-user-facing until those are confirmed, even in a closed pilot.
+**Status as of 2026-06-30:** PRD draft v1.0 complete; MVP backend + frontend implemented
+end-to-end (auth, AI Companion, journal, knowledge platform, resource directory, consent/
+export/deletion — see CLAUDE.md "Where the project actually is" for the full breakdown of
+what's built vs. still placeholder/unbuilt). Tier 1 research gates (clinical safety review,
+legal content review, data protection counsel review — PRD §7.1) have **not** yet been
+confirmed. No crisis flow, legal content, or user data collection should ship to real users
+until those are confirmed, even in a closed pilot — what's in this repo today is
+development-stage, with crisis detection and legal content explicitly placeholder/unreviewed.

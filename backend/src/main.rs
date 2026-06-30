@@ -1,4 +1,8 @@
+mod auth;
 mod config;
+mod crisis;
+mod crypto;
+mod llm;
 mod routes;
 
 use std::net::SocketAddr;
@@ -18,7 +22,7 @@ async fn main() -> anyhow::Result<()> {
         )
         .init();
 
-    let state = AppState::connect().await;
+    let state = AppState::connect().await?;
 
     // CorsLayer::permissive() is a local-dev default — tighten to the actual web origin
     // before any non-local deployment (see CLAUDE.md / go-live-checklist skill).
