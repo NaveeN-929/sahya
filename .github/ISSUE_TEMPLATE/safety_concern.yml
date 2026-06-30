@@ -1,0 +1,86 @@
+name: Safety concern
+description: The product behaved in a way that could cause real-world harm — crisis handling, AI agent advice, legal/clinical content, or neutrality.
+title: "[Safety] "
+labels: ["safety", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **If you are in crisis right now, this issue tracker is not the right place.** Call
+        Tele-MANAS at **14416** (India, 24/7) or your local emergency number. This template is
+        for reporting that the *product* mishandled a safety-relevant situation, not for getting
+        support yourself.
+
+        **Security vulnerability** (auth bypass, data leak, decryption flaw, etc.)? Use the
+        private process in [`SECURITY.md`](../../SECURITY.md) instead — not this public template.
+
+        This template covers the kind of issue described in `CLAUDE.md`'s non-negotiables:
+        a crisis signal that wasn't surfaced, an AI agent giving diagnosis/legal-advice/case-merit
+        judgment it shouldn't, a fabricated hotline or resource name, content that isn't neutral
+        on the underlying gender-law debate, or anything else where the *content or behavior*
+        itself — not a security hole — could put a user at risk.
+
+        **Do not paste real journal entries, real conversation transcripts, or anything that could
+        identify a real user — including yourself — anywhere in this issue, even redacted.**
+        Reproduce the issue with synthetic/test input and paste that instead.
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options:
+        - Crisis signal missed or resources not surfaced
+        - Crisis resources route became unavailable/dependent on something it shouldn't be
+        - AI agent gave diagnosis, legal advice, or case-merit judgment
+        - AI agent fabricated a hotline, organization name, URL, or other resource detail
+        - AI agent mirrored/amplified hostility toward a named third party
+        - Legal content not RAG-grounded, inaccurate, or missing required disclaimer/citation
+        - Content or copy not neutral on the underlying gender-law debate
+        - Silent third-party contact/escalation without the user taking an explicit action
+        - Identity required where it shouldn't be (AI Companion / Journal / Knowledge Platform)
+        - Other safety-relevant behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: Describe the behavior. Use synthetic test input if you need to show an example — see the warning above.
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: Page/route, what you entered (synthetic only), what came back.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What should have happened instead?
+      description: Reference the specific non-negotiable or PRD section if you know it (e.g. PRD §9.4.1, CLAUDE.md non-negotiable #4).
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: How urgent is this?
+      description: Your best judgment — triage will confirm.
+      options:
+        - Critical — this could actively endanger a user if it ships/stays live
+        - High — clear violation of a non-negotiable, not actively dangerous in the immediate moment
+        - Medium — content/tone issue, not a safety-critical path
+        - Not sure
+    validations:
+      required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Local dev, staging, production — and commit/branch if known.

@@ -1,0 +1,68 @@
+name: Feature request
+description: Propose a new feature or an enhancement to an existing one.
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before proposing, it's worth checking [`Sahay_Master_PRD_v1.md`](../../Sahay_Master_PRD_v1.md)
+        and [`CLAUDE.md`](../../CLAUDE.md) — scope and phasing (MVP vs. Phase 1.5 vs. Phase 3) are
+        already decided there, and the "non-negotiables" section rules a few categories of feature
+        out entirely (e.g. anything that silently requires identity, or auto-escalates a user's
+        situation to a third party without their action). If your idea conflicts with one of those,
+        say so explicitly in the description below rather than leaving it implicit — it'll get
+        evaluated as a proposal to change a non-negotiable, not as a regular feature request.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Who hits this, and what's the impact of not having it?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: What would you like to see built? Sketch the UX or API shape if you can.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Any other approaches you thought about, and why you'd prefer this one.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - frontend (Next.js client)
+        - backend (Rust/Axum API)
+        - AI agent / orchestration
+        - knowledge platform / legal content
+        - journal
+        - resource directory
+        - admin panel
+        - design system
+        - other / not sure
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: non_negotiable_check
+    attributes:
+      label: Non-negotiables check
+      description: Read `CLAUDE.md`'s non-negotiables section, then confirm.
+      options:
+        - label: This proposal doesn't require identity for AI Companion, Journal, or Knowledge Platform.
+          required: false
+        - label: This proposal doesn't add silent third-party notification or auto-escalation.
+          required: false
+        - label: This proposal doesn't involve open LLM generation for legal-specific content.
+          required: false
+        - label: I've flagged in the description above if this proposal conflicts with a non-negotiable on purpose (e.g. I'm proposing to change one, not just unaware of it).
+          required: false
