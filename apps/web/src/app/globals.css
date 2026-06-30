@@ -1,0 +1,205 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+@config "../../tailwind.config.ts";
+
+/**
+ * Digital Sanctuary — Design System
+ * Global CSS variables, ported from design-system/tokens/globals.css.
+ * Light theme is default. .dark and [data-contrast="high"] override via root attributes —
+ * see design-system/docs/DESIGN-SYSTEM.md §11 for the attribute-driven theming model.
+ */
+
+:root {
+  color-scheme: light;
+
+  /* ---- Brand ---- */
+  --color-primary-50:  #EEF2FF;
+  --color-primary-100: #DDE5FC;
+  --color-primary-200: #B8C7F7;
+  --color-primary-300: #8FA4F0;
+  --color-primary-400: #6B85E8;
+  --color-primary-500: #3B5BDB; /* Slate Blue — interactive */
+  --color-primary-600: #2F4BC4;
+  --color-primary-700: #25399A;
+  --color-primary-800: #1F3A5F; /* Deep Navy — anchor */
+  --color-primary-900: #16283F;
+  --color-primary-950: #0E1A2A;
+
+  --color-secondary-50:  #EAF6EF;
+  --color-secondary-100: #CDEAD8;
+  --color-secondary-300: #7FC79A;
+  --color-secondary-500: #2F855A; /* Emerald */
+  --color-secondary-600: #256B48;
+  --color-secondary-700: #1C5238;
+
+  --color-amber-50:  #FDF6E8;
+  --color-amber-100: #FAEAC0;
+  --color-amber-300: #EFC669;
+  --color-amber-500: #D69E2E;
+  --color-amber-600: #B17F1F;
+
+  /* ---- Neutrals ---- */
+  --color-neutral-0:   #FFFFFF;
+  --color-neutral-25:  #FBFAF8;
+  --color-neutral-50:  #F6F4F1;
+  --color-neutral-100: #EDEAE5;
+  --color-neutral-200: #DCD7D0;
+  --color-neutral-300: #C2BBB1;
+  --color-neutral-400: #9C9389;
+  --color-neutral-500: #79716A;
+  --color-neutral-600: #5C5650;
+  --color-neutral-700: #433F3B;
+  --color-neutral-800: #2C2926;
+  --color-neutral-900: #1C1A18;
+  --color-neutral-950: #121110;
+
+  /* ---- Semantic ---- */
+  --color-success-bg: #EAF6EF; --color-success-border: #9FD6B5; --color-success-fg: #1C5238; --color-success-solid: #2F855A;
+  --color-warning-bg: #FDF6E8; --color-warning-border: #F4D78F; --color-warning-fg: #8A6217; --color-warning-solid: #D69E2E;
+  --color-info-bg:    #EBF2FB; --color-info-border:    #A9C6E8; --color-info-fg:    #1E4A78; --color-info-solid: #2B6CB0;
+  --color-error-bg:   #FCEDED; --color-error-border:   #E6AEAE; --color-error-fg:   #7A2222; --color-error-solid: #C53030;
+  --color-emergency-solid: #C53030;
+  --color-emergency-solid-hover: #9B2C2C;
+
+  /* ---- Surfaces / text (semantic aliases — use these in components) ---- */
+  --bg-canvas: var(--color-neutral-25);
+  --bg-surface: var(--color-neutral-0);
+  --bg-surface-raised: var(--color-neutral-0);
+  --bg-muted: var(--color-neutral-50);
+  --bg-inverse: var(--color-primary-900);
+
+  --border-default: var(--color-neutral-200);
+  --border-strong: var(--color-neutral-300);
+  --border-focus: var(--color-primary-500);
+
+  --text-primary: var(--color-neutral-900);
+  --text-secondary: var(--color-neutral-600);
+  --text-muted: var(--color-neutral-500);
+  --text-inverse: var(--color-neutral-0);
+  --text-link: var(--color-primary-600);
+  --text-brand: var(--color-primary-800);
+
+  --interactive-primary: var(--color-primary-500);
+  --interactive-primary-hover: var(--color-primary-600);
+  --interactive-primary-active: var(--color-primary-700);
+  --interactive-secondary: var(--color-secondary-500);
+
+  /* ---- Typography ---- */
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-heading: 'Inter Tight', 'Geist', 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+
+  /* ---- Radius ---- */
+  --radius-sm: 8px;
+  --radius-input: 12px;
+  --radius-button: 12px;
+  --radius-card: 14px;
+  --radius-card-lg: 16px;
+  --radius-full: 9999px;
+
+  /* ---- Elevation ---- */
+  --shadow-1: 0 1px 2px 0 rgb(28 26 24 / 0.04);
+  --shadow-2: 0 2px 8px -2px rgb(28 26 24 / 0.06), 0 1px 2px -1px rgb(28 26 24 / 0.04);
+  --shadow-3: 0 8px 24px -4px rgb(28 26 24 / 0.08), 0 2px 6px -2px rgb(28 26 24 / 0.05);
+  --shadow-4: 0 16px 40px -8px rgb(28 26 24 / 0.12), 0 4px 10px -2px rgb(28 26 24 / 0.06);
+  --shadow-focus-ring: 0 0 0 3px rgb(59 91 219 / 0.35);
+
+  /* ---- Motion ---- */
+  --duration-fast: 150ms;
+  --duration-base: 200ms;
+  --duration-slow: 300ms;
+  --duration-deliberate: 500ms;
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-decelerate: cubic-bezier(0, 0, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.1, 0.64, 1);
+}
+
+/* ===================== DARK THEME ===================== */
+.dark {
+  color-scheme: dark;
+
+  --bg-canvas: var(--color-neutral-950);
+  --bg-surface: var(--color-neutral-900);
+  --bg-surface-raised: var(--color-neutral-800);
+  --bg-muted: var(--color-neutral-800);
+  --bg-inverse: var(--color-neutral-0);
+
+  --border-default: var(--color-neutral-700);
+  --border-strong: var(--color-neutral-600);
+  --border-focus: var(--color-primary-400);
+
+  --text-primary: var(--color-neutral-50);
+  --text-secondary: var(--color-neutral-300);
+  --text-muted: var(--color-neutral-400);
+  --text-inverse: var(--color-neutral-900);
+  --text-link: var(--color-primary-300);
+  --text-brand: var(--color-primary-300);
+
+  --interactive-primary: var(--color-primary-400);
+  --interactive-primary-hover: var(--color-primary-300);
+  --interactive-primary-active: var(--color-primary-200);
+
+  --color-success-bg: #16291F; --color-success-border: #2A4A38; --color-success-fg: #8FD3AC;
+  --color-warning-bg: #2B2310; --color-warning-border: #4A3C1C; --color-warning-fg: #EFC669;
+  --color-info-bg:    #131F2E; --color-info-border:    #21405E; --color-info-fg:    #9FC6EC;
+  --color-error-bg:   #2B1414; --color-error-border:   #4F2222; --color-error-fg:   #F0A8A8;
+
+  --shadow-1: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow-2: 0 2px 8px -2px rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.3);
+  --shadow-3: 0 8px 24px -4px rgb(0 0 0 / 0.5), 0 2px 6px -2px rgb(0 0 0 / 0.3);
+  --shadow-4: 0 16px 40px -8px rgb(0 0 0 / 0.6), 0 4px 10px -2px rgb(0 0 0 / 0.4);
+}
+
+/* ===================== HIGH CONTRAST OVERRIDE ===================== */
+/* Applies on top of light or dark via [data-contrast="high"] */
+[data-contrast="high"] {
+  --border-default: var(--color-neutral-900);
+  --text-secondary: var(--color-neutral-900);
+  --text-muted: var(--color-neutral-700);
+  --shadow-1: none; --shadow-2: none; --shadow-3: none; --shadow-4: none;
+}
+[data-contrast="high"].dark {
+  --border-default: var(--color-neutral-0);
+  --text-secondary: var(--color-neutral-0);
+  --text-muted: var(--color-neutral-100);
+}
+
+/* ===================== LARGE TEXT MODE ===================== */
+[data-text-size="large"] {
+  font-size: 112.5%; /* scales the rem base; component spacing should use rem, not px, to respond */
+}
+
+/* ===================== REDUCED MOTION ===================== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+[data-motion="reduced"] *, [data-motion="reduced"] *::before, [data-motion="reduced"] *::after {
+  animation-duration: 0.01ms !important;
+  transition-duration: 0.01ms !important;
+}
+
+/* ===================== BASE ELEMENTS ===================== */
+body {
+  background-color: var(--bg-canvas);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+/* Visible keyboard focus everywhere — never remove outline without replacing it */
+:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus-ring);
+  border-radius: var(--radius-sm);
+}

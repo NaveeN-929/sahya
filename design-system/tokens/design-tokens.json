@@ -1,0 +1,164 @@
+{
+  "meta": {
+    "name": "Digital Sanctuary",
+    "description": "Design system for a men's emotional support, legal information, and crisis resource platform.",
+    "version": "1.0.0",
+    "principles": ["calm", "compassionate", "trustworthy", "professional", "modern", "privacy-first", "non-judgmental", "human-centered"]
+  },
+
+  "color": {
+    "primary": {
+      "50":  "#EEF2FF",
+      "100": "#DDE5FC",
+      "200": "#B8C7F7",
+      "300": "#8FA4F0",
+      "400": "#6B85E8",
+      "500": "#3B5BDB",
+      "600": "#2F4BC4",
+      "700": "#25399A",
+      "800": "#1F3A5F",
+      "900": "#16283F",
+      "950": "#0E1A2A",
+      "_usage": "500 = Slate Blue, primary interactive color (buttons, links, focus). 800 = Deep Navy, used for headers, nav, dark surfaces, and as the anchor brand color."
+    },
+    "secondary": {
+      "50":  "#EAF6EF",
+      "100": "#CDEAD8",
+      "200": "#9FD6B5",
+      "300": "#7FC79A",
+      "400": "#4FA876",
+      "500": "#2F855A",
+      "600": "#256B48",
+      "700": "#1C5238",
+      "800": "#153D2A",
+      "_usage": "Emerald. Used for growth, progress, calm-positive states, completed steps. Doubles as the 'success' semantic base."
+    },
+    "amber": {
+      "50":  "#FDF6E8",
+      "100": "#FAEAC0",
+      "200": "#F4D78F",
+      "300": "#EFC669",
+      "400": "#E2AE3F",
+      "500": "#D69E2E",
+      "600": "#B17F1F",
+      "700": "#8A6217",
+      "_usage": "Warm accent for highlights, gentle encouragement, in-progress states. Doubles as the 'warning' semantic base — never used to signal danger."
+    },
+    "neutral": {
+      "0":   "#FFFFFF",
+      "25":  "#FBFAF8",
+      "50":  "#F6F4F1",
+      "100": "#EDEAE5",
+      "200": "#DCD7D0",
+      "300": "#C2BBB1",
+      "400": "#9C9389",
+      "500": "#79716A",
+      "600": "#5C5650",
+      "700": "#433F3B",
+      "800": "#2C2926",
+      "900": "#1C1A18",
+      "950": "#121110",
+      "_usage": "0 = White. 25 = Off White (page background, light theme). 100-200 = Soft Gray (borders, dividers). 500-600 = Warm Gray (secondary text). 900 = Charcoal (primary text, dark surfaces)."
+    },
+    "semantic": {
+      "success": { "bg": "#EAF6EF", "border": "#9FD6B5", "fg": "#1C5238", "solid": "#2F855A" },
+      "warning": { "bg": "#FDF6E8", "border": "#F4D78F", "fg": "#8A6217", "solid": "#D69E2E" },
+      "info":    { "bg": "#EBF2FB", "border": "#A9C6E8", "fg": "#1E4A78", "solid": "#2B6CB0" },
+      "error":   { "bg": "#FCEDED", "border": "#E6AEAE", "fg": "#7A2222", "solid": "#C53030" },
+      "_usage": "Error/red is reserved exclusively for true emergencies, destructive confirmations, and irreversible actions. It must never appear for routine validation or default states."
+    },
+    "emergency": {
+      "bg": "#FCEDED",
+      "border": "#E6AEAE",
+      "fg": "#7A2222",
+      "solid": "#C53030",
+      "solidHover": "#9B2C2C",
+      "_usage": "Crisis banner and emergency action card only. Single, restrained use case — not a general alert color."
+    }
+  },
+
+  "typography": {
+    "fontFamily": {
+      "body": "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+      "heading": "'Inter Tight', Geist, Inter, sans-serif",
+      "mono": "'JetBrains Mono', ui-monospace, SFMono-Regular, monospace"
+    },
+    "fontWeight": { "regular": 400, "medium": 500, "semibold": 600, "bold": 700 },
+    "scale": {
+      "xs":   { "size": "12px", "lineHeight": "18px", "tracking": "0.01em" },
+      "sm":   { "size": "14px", "lineHeight": "21px", "tracking": "0.01em" },
+      "base": { "size": "16px", "lineHeight": "26px", "tracking": "0em" },
+      "lg":   { "size": "18px", "lineHeight": "28px", "tracking": "0em" },
+      "xl":   { "size": "20px", "lineHeight": "30px", "tracking": "-0.01em" },
+      "2xl":  { "size": "24px", "lineHeight": "32px", "tracking": "-0.01em" },
+      "3xl":  { "size": "30px", "lineHeight": "38px", "tracking": "-0.015em" },
+      "4xl":  { "size": "36px", "lineHeight": "44px", "tracking": "-0.02em" },
+      "5xl":  { "size": "48px", "lineHeight": "56px", "tracking": "-0.02em" },
+      "6xl":  { "size": "60px", "lineHeight": "68px", "tracking": "-0.025em" },
+      "_usage": "Headings use weight 600 max (never 700+) to avoid an aggressive tone. Body copy never drops below 16px for primary reading content."
+    }
+  },
+
+  "radius": {
+    "none": "0px",
+    "sm": "8px",
+    "input": "12px",
+    "button": "12px",
+    "card": "14px",
+    "cardLg": "16px",
+    "full": "9999px",
+    "_usage": "Soft corners throughout. No sharp 0px/2px radii except rare table-cell edge cases."
+  },
+
+  "spacing": {
+    "1": "4px", "2": "8px", "3": "12px", "4": "16px",
+    "6": "24px", "8": "32px", "12": "48px", "16": "64px",
+    "_usage": "Strict 8pt-derived scale: 4 8 12 16 24 32 48 64. No off-scale values in product UI."
+  },
+
+  "elevation": {
+    "0": "none",
+    "1": "0 1px 2px 0 rgb(28 26 24 / 0.04)",
+    "2": "0 2px 8px -2px rgb(28 26 24 / 0.06), 0 1px 2px -1px rgb(28 26 24 / 0.04)",
+    "3": "0 8px 24px -4px rgb(28 26 24 / 0.08), 0 2px 6px -2px rgb(28 26 24 / 0.05)",
+    "4": "0 16px 40px -8px rgb(28 26 24 / 0.12), 0 4px 10px -2px rgb(28 26 24 / 0.06)",
+    "focusRing": "0 0 0 3px rgb(59 91 219 / 0.35)",
+    "_usage": "1 = resting cards. 2 = hover/raised cards. 3 = popovers/dropdowns. 4 = dialogs/drawers. Never use harder shadows than level 4."
+  },
+
+  "opacity": {
+    "disabled": 0.45,
+    "overlay": 0.4,
+    "subtle": 0.06,
+    "hover": 0.08,
+    "pressed": 0.12
+  },
+
+  "motion": {
+    "duration": { "instant": "100ms", "fast": "150ms", "base": "200ms", "slow": "300ms", "deliberate": "500ms" },
+    "easing": {
+      "standard": "cubic-bezier(0.4, 0, 0.2, 1)",
+      "decelerate": "cubic-bezier(0, 0, 0.2, 1)",
+      "accelerate": "cubic-bezier(0.4, 0, 1, 1)",
+      "gentleSpring": "cubic-bezier(0.34, 1.1, 0.64, 1)"
+    },
+    "_usage": "Default to fade + 4-8px slide for entrances. Scale transforms stay within 0.96-1.0. All motion must degrade to opacity-only fades under prefers-reduced-motion."
+  },
+
+  "breakpoints": {
+    "mobile": "0px",
+    "sm": "640px",
+    "tablet": "768px",
+    "lg": "1024px",
+    "desktop": "1280px",
+    "2xl": "1536px",
+    "_usage": "4-column grid on mobile (gutter 16px), 8-column on tablet (gutter 24px), 12-column on desktop (gutter 24px, max-width 1280px)."
+  },
+
+  "iconography": {
+    "library": "lucide-react",
+    "defaultSize": 20,
+    "strokeWidth": 1.75,
+    "_usage": "Rounded, minimal line icons only. No filled/duotone icon sets, no emoji as functional UI elements."
+  }
+}
