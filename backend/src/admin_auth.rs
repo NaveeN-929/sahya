@@ -4,11 +4,11 @@
 //! `admin_sessions`/`admins` table, so a bug or compromise in one auth system can never
 //! grant access to the other.
 
+use argon2::Argon2;
 use argon2::password_hash::{
     PasswordHash, PasswordHashString, PasswordHasher, PasswordVerifier, SaltString,
     rand_core::OsRng,
 };
-use argon2::Argon2;
 use axum::extract::FromRequestParts;
 use axum::http::StatusCode;
 use axum::http::request::Parts;

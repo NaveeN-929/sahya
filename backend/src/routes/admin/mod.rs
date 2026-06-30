@@ -2,16 +2,16 @@
 //! API surface — see `admin_auth.rs` and migration `0005_admin_panel.sql` for why this is a
 //! distinct auth system rather than a role check bolted onto existing routes.
 
-mod auth;
 pub mod audit;
+mod auth;
 mod crisis;
 mod knowledge;
 mod professionals;
 mod users;
 
+use axum::Router;
 use axum::http::StatusCode;
 use axum::response::{IntoResponse, Response};
-use axum::Router;
 
 use crate::config::AppState;
 
