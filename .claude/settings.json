@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cargo add *)",
+      "Bash(cargo build *)",
+      "Bash(cargo check *)",
+      "Bash(tasklist)",
+      "Bash(npx eslint *)"
+    ]
+  }
+}

@@ -60,6 +60,21 @@ Runs on `http://localhost:3000`. Pages: `/` (landing/first disclosure), `/chat` 
 Companion), `/journal`, `/directory` (resource directory), `/knowledge` (educational
 content), `/privacy` (consents, data export, account deletion).
 
+**Admin panel:** `/admin` is a separate auth system from the anonymous end-user sessions —
+there's no public admin sign-up. Bootstrap the first admin account from `backend/`, with
+`DATABASE_URL` set (e.g. via `.env`):
+
+```sh
+cd backend
+cargo run --bin create_admin -- --email you@example.com --password <a-strong-password> --name "Your Name"
+```
+
+This inserts (or updates, if the email already exists) a row in the `admins` table — run it
+again with a different `--email` to add another admin. Sign in at
+`http://localhost:3000/admin/login`. Covers knowledge-content review, professional-directory
+vetting, aggregate/non-PII crisis monitoring, and break-glass data-subject export/deletion;
+every mutating action is written to `audit_logs`.
+
 ## Before building a feature
 
 Read [`CLAUDE.md`](CLAUDE.md)'s non-negotiables section first — this product handles

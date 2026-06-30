@@ -19,6 +19,8 @@ const TELE_MANAS_TEL = "tel:14416";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const isAdminRoute = pathname?.startsWith("/admin") ?? false;
+
   // Starts null on both server and the client's first paint on purpose — the server can
   // never know the client's localStorage value, so seeding this from getStoredHandle() in
   // a lazy initializer (the "obvious" fix) causes a hydration mismatch the moment a token
@@ -26,6 +28,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const [handle, setHandle] = useState<string | null>(null);
 
   useEffect(() => {
+    // The admin panel has its own AdminShell/auth — never start an anonymous end-user
+    // session on an admin route, and never run hooks conditionally (this check happens
+    // inside the effect, not before the hook calls above, to keep hook order stable).
+    if (isAdminRoute) return;
     // Post-hydration sync from localStorage; setting this any earlier reintroduces the
     // hydration mismatch explained above.
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -35,7 +41,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       .catch((err) => {
         console.error("could not start anonymous session", err);
       });
-  }, []);
+  }, [isAdminRoute]);
+
+  // The admin panel has its own AdminShell (separate nav, separate auth) and must never
+  // render the public chrome/emergency button — it renders inside its own layout instead.
+  if (isAdminRoute) {
+    return <>{children}</>;
+  }
 
   return (
     <div className="flex min-h-full flex-col bg-canvas">

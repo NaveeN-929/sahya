@@ -1,17 +1,10 @@
-mod auth;
-mod config;
-mod crisis;
-mod crypto;
-mod llm;
-mod routes;
-
 use std::net::SocketAddr;
 
+use api::config::AppState;
+use api::routes;
 use tower_http::cors::CorsLayer;
 use tower_http::trace::TraceLayer;
 use tracing_subscriber::EnvFilter;
-
-use crate::config::AppState;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
