@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Send } from "lucide-react";
+import { Plus, Send } from "lucide-react";
 import { Button } from "@/components/button";
 import {
   AIMessageCard,
@@ -11,7 +11,13 @@ import {
 } from "@/components/chat-bubble";
 import { CrisisBanner, EscalationCard } from "@/components/crisis-banner";
 import { MoodSelector, type MoodKey } from "@/components/mood-selector";
-import { converse, getConversation, checkin, type CrisisResource } from "@/lib/api";
+import {
+  converse,
+  getConversation,
+  checkin,
+  deleteConversation,
+  type CrisisResource,
+} from "@/lib/api";
 import { takePendingMessage } from "@/lib/pending-message";
 
 const TELE_MANAS_TEL = "tel:14416";
@@ -54,6 +60,7 @@ export default function ChatPage() {
   const [safetyResources, setSafetyResources] = useState<CrisisResource[] | null>(null);
   const [showMoodCheckin, setShowMoodCheckin] = useState(false);
   const [mood, setMood] = useState<MoodKey | undefined>(undefined);
+  const [confirmingNewChat, setConfirmingNewChat] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -126,6 +133,26 @@ export default function ChatPage() {
     }
   }
 
+  /** FR-1.2: conversations are deletable by the user. "New chat" both clears the view and
+   * permanently deletes the conversation it's clearing — confirmed first if there's
+   * anything in it, same pattern as the destructive-confirm on /privacy. */
+  async function startNewChat() {
+    const idToDelete = conversationId;
+    setMessages([]);
+    setConversationId(null);
+    setSafetyResources(null);
+    setInput("");
+    setConfirmingNewChat(false);
+    window.sessionStorage.removeItem(CONVERSATION_STORAGE_KEY);
+    if (idToDelete) {
+      try {
+        await deleteConversation(idToDelete);
+      } catch (err) {
+        console.error("could not delete previous conversation", err);
+      }
+    }
+  }
+
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-4">
       <CrisisBanner
@@ -137,9 +164,27 @@ export default function ChatPage() {
 
       <div className="flex items-center justify-between">
         <h1 className="font-heading text-xl font-semibold text-ink">AI Companion</h1>
-        <Button variant="ghost" size="sm" onClick={() => setShowMoodCheckin((v) => !v)}>
-          Daily check-in
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="sm" onClick={() => setShowMoodCheckin((v) => !v)}>
+            Daily check-in
+          </Button>
+          {messages.length > 0 &&
+            (confirmingNewChat ? (
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-ink-muted">Clear this conversation?</span>
+                <Button variant="destructive" size="sm" onClick={() => void startNewChat()}>
+                  Yes, start new
+                </Button>
+                <Button variant="ghost" size="sm" onClick={() => setConfirmingNewChat(false)}>
+                  Cancel
+                </Button>
+              </div>
+            ) : (
+              <Button variant="outline" size="sm" onClick={() => setConfirmingNewChat(true)}>
+                <Plus className="h-4 w-4" strokeWidth={1.75} /> New chat
+              </Button>
+            ))}
+        </div>
       </div>
 
       {showMoodCheckin && (
