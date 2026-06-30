@@ -1,4 +1,5 @@
 mod account;
+mod admin;
 mod agent;
 mod auth;
 mod crisis_resources;
@@ -27,4 +28,5 @@ fn api_v1_router() -> Router<AppState> {
         .merge(directory::router())
         .merge(crisis_resources::router())
         .merge(account::router())
+        .merge(admin::router())
 }
