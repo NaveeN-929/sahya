@@ -1,0 +1,68 @@
+name: Bug report
+description: Something in the app or backend isn't working as intended.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report this. A few notes before you start:
+
+        - **Security vulnerability?** Don't file it here — use the private process in [`SECURITY.md`](../../SECURITY.md).
+        - **Concern about crisis-response behavior, a legal/clinical content error, or an AI agent saying something it shouldn't?** Use the **Safety concern** template instead, not this one — those get triaged differently.
+        - Never paste real journal entries, conversation transcripts, or anything that could identify a real user, even your own test data, into a public issue. Describe the behavior instead.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: A clear description of the bug.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: Be as specific as possible — page/route, request payload shape (sanitized), browser/OS if relevant.
+      placeholder: |
+        1. Go to '...'
+        2. Do '...'
+        3. See error
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - frontend (Next.js client)
+        - backend (Rust/Axum API)
+        - AI orchestration / agent behavior (non-safety)
+        - database / migrations
+        - admin panel
+        - infra / docker-compose
+        - design system
+        - other / not sure
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Commit / branch
+      description: The commit hash or branch you're running, if known.
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs or error output
+      description: Paste any terminal output, stack traces, or console errors. No need for backticks, we'll format it.
+      render: shell
