@@ -25,8 +25,14 @@ pub fn router() -> Router<AppState> {
             "/admin/professionals/{id}",
             axum::routing::patch(update_professional),
         )
-        .route("/admin/professionals/{id}/verify", post(verify_professional))
-        .route("/admin/professionals/{id}/reject", post(reject_professional))
+        .route(
+            "/admin/professionals/{id}/verify",
+            post(verify_professional),
+        )
+        .route(
+            "/admin/professionals/{id}/reject",
+            post(reject_professional),
+        )
 }
 
 #[derive(Deserialize)]

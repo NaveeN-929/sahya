@@ -65,7 +65,9 @@ async fn crisis_summary(
     };
 
     let until = params.until.unwrap_or_else(Utc::now);
-    let since = params.since.unwrap_or_else(|| until - chrono::Duration::days(30));
+    let since = params
+        .since
+        .unwrap_or_else(|| until - chrono::Duration::days(30));
 
     let totals = sqlx::query(
         "select count(*) as total, \
