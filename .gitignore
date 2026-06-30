@@ -4,15 +4,15 @@
 *.env
 !.env.example
 
-# Node / Next.js (apps/web)
-apps/web/node_modules/
-apps/web/.next/
-apps/web/out/
-apps/web/next-env.d.ts
+# Node / Next.js (frontend)
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/next-env.d.ts
 npm-debug.log*
 
-# Rust (apps/api)
-apps/api/target/
+# Rust (backend)
+backend/target/
 
 # OS / editor
 .DS_Store

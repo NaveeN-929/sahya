@@ -6,29 +6,29 @@ on:
   pull_request:
 
 jobs:
-  web:
-    name: web (lint + build)
+  frontend:
+    name: frontend (lint + build)
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: apps/web
+        working-directory: frontend
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: apps/web/package-lock.json
+          cache-dependency-path: frontend/package-lock.json
       - run: npm ci
       - run: npm run lint
       - run: npm run build
 
-  api:
-    name: api (fmt + clippy + build + test)
+  backend:
+    name: backend (fmt + clippy + build + test)
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: apps/api
+        working-directory: backend
     services:
       postgres:
         image: pgvector/pgvector:pg16
@@ -51,7 +51,7 @@ jobs:
           components: rustfmt, clippy
       - uses: Swatinem/rust-cache@v2
         with:
-          workspaces: apps/api
+          workspaces: backend
       - run: cargo fmt --check
       - run: cargo clippy --all-targets -- -D warnings
       - run: cargo build --all-targets

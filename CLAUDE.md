@@ -72,13 +72,17 @@ shape; route through the orchestration layer's own interface.
 ```
 Sahay_Master_PRD_v1.md   — master PRD, source of truth for product/legal/architecture
 design-system/           — Digital Sanctuary design system (tokens, components, docs)
-apps/
-  web/                   — Next.js client (PWA-style, mobile-responsive first)
-  api/                   — Rust/Axum application + AI orchestration service
-infra/
-  docker-compose.yml     — local Postgres + services
+frontend/                — Next.js client (PWA-style, mobile-responsive first)
+backend/                 — Rust/Axum application + AI orchestration service
+  infra/
+    docker-compose.yml   — local Postgres + services
 .claude/skills/          — project-specific Claude Code skills (see below)
 ```
+
+`frontend/` and `backend/` are independent projects under this one repo — each owns its own
+dependency manifest, lockfile, and build/lint/test pipeline (see `.github/workflows/ci.yml`).
+Don't introduce cross-imports between them; they communicate only over the versioned HTTP
+API.
 
 ## Engineering conventions
 

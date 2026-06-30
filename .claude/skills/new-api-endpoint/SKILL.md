@@ -1,9 +1,9 @@
 ---
 name: new-api-endpoint
-description: Scaffold a new REST endpoint in Sahay's Rust/Axum application plane (apps/api) following its auth, encryption, and versioning conventions. Use when asked to add or modify a backend API route for Sahay.
+description: Scaffold a new REST endpoint in Sahay's Rust/Axum application plane (backend/) following its auth, encryption, and versioning conventions. Use when asked to add or modify a backend API route for Sahay.
 ---
 
-# New API Endpoint (Sahay apps/api)
+# New API Endpoint (Sahay backend/)
 
 ## Conventions (PRD §11.1)
 
@@ -44,7 +44,7 @@ description: Scaffold a new REST endpoint in Sahay's Rust/Axum application plane
    it must remain servable with zero dependency on the database or AI orchestration layer —
    static/cached, CDN-edge-servable (PRD §11.6, NFR-1). Don't add a DB lookup to this
    specific route for convenience.
-9. **Update the route table** in `apps/api`'s router module and confirm the response shape
+9. **Update the route table** in `backend/`'s router module and confirm the response shape
    matches what's documented in `Sahay_Master_PRD_v1.md` §11 for that resource (or update
    the PRD section if this is a deliberate, agreed deviation).
 

@@ -1,6 +1,6 @@
 ---
 name: new-ai-agent
-description: Scaffold a new AI orchestration agent (emotional support, legal info, abuse assessment, crisis detection, journal assistant, resource recommendation, or a new one) in apps/api's AI orchestration layer with Sahay's required safety boundaries wired in. Use when asked to add, build, or modify an AI agent/conversational capability for Sahay.
+description: Scaffold a new AI orchestration agent (emotional support, legal info, abuse assessment, crisis detection, journal assistant, resource recommendation, or a new one) in backend/'s AI orchestration layer with Sahay's required safety boundaries wired in. Use when asked to add, build, or modify an AI agent/conversational capability for Sahay.
 ---
 
 # New AI Agent (Sahay orchestration layer)
@@ -58,7 +58,7 @@ calls a provider directly. Every agent goes through the same request lifecycle:
 
 ## Where things live
 
-- Agent type enum / routing: `apps/api` orchestration module — keep `agent_type` values in
+- Agent type enum / routing: `backend/` orchestration module — keep `agent_type` values in
   sync with the DB enum used in `ai_conversations.agent_type`.
 - Knowledge base content for RAG agents: ingested into `knowledge_chunks` (pgvector), each
   row carries `source_citation`, `content_category` (maps to PRD §3 taxonomy), `reviewed_by`,

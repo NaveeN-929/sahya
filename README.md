@@ -11,27 +11,30 @@ product, architecture, legal, and business specification, and
 ```
 Sahay_Master_PRD_v1.md   — master PRD (source of truth)
 design-system/           — Digital Sanctuary design system (tokens, components, docs)
-apps/
-  web/                   — Next.js client (App Router, Tailwind v4, Digital Sanctuary design system)
-  api/                   — Rust/Axum application + AI orchestration service
-infra/
-  docker-compose.yml     — local Postgres (pgvector) for development
+frontend/                — Next.js client (App Router, Tailwind v4, Digital Sanctuary design system)
+backend/                 — Rust/Axum application + AI orchestration service
+  infra/
+    docker-compose.yml   — local Postgres (pgvector) for development
 .claude/skills/          — project-specific Claude Code skills (new agent, new endpoint, design component, legal content, DB migration, safety/DPDPA check, go-live checklist)
-.github/workflows/       — CI (web lint/build, api fmt/clippy/build/test)
+.github/workflows/       — CI (frontend lint/build, backend fmt/clippy/build/test)
 ```
+
+`frontend/` and `backend/` are independent projects sharing this one repo — each has its
+own dependency manifest, lockfile, and build/lint/test commands, and is meant to be worked
+on (and eventually deployed) on its own.
 
 ## Local development
 
 **Database:**
 
 ```sh
-docker compose -f infra/docker-compose.yml up -d
+docker compose -f backend/infra/docker-compose.yml up -d
 ```
 
-**API (`apps/api`):**
+**Backend (`backend/`):**
 
 ```sh
-cd apps/api
+cd backend
 cp .env.example .env   # adjust DATABASE_URL if needed
 cargo sqlx migrate run --source migrations   # or: sqlx migrate run (requires sqlx-cli)
 cargo run
@@ -41,10 +44,10 @@ The API binds to `0.0.0.0:8080` by default. `/healthz` reports process + DB stat
 `/api/v1/directory/crisis-resources` works even without a database connection — that's a
 deliberate architectural property, not an oversight (see PRD §11.6).
 
-**Web (`apps/web`):**
+**Frontend (`frontend/`):**
 
 ```sh
-cd apps/web
+cd frontend
 npm install
 npm run dev
 ```

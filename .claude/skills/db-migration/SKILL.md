@@ -1,9 +1,9 @@
 ---
 name: db-migration
-description: Write a new PostgreSQL migration for Sahay's apps/api, applying the correct sensitivity tier, encryption, and consent/retention wiring for new or changed tables. Use when asked to add, change, or remove a database table or column for Sahay.
+description: Write a new PostgreSQL migration for Sahay's backend/, applying the correct sensitivity tier, encryption, and consent/retention wiring for new or changed tables. Use when asked to add, change, or remove a database table or column for Sahay.
 ---
 
-# DB Migration (Sahay apps/api, PostgreSQL)
+# DB Migration (Sahay backend/, PostgreSQL)
 
 Sahay uses Postgres (with `pgvector` for MVP-scale vector search — PRD §8.3), not MongoDB,
 specifically because consent/data-subject-request handling needs real foreign keys and
